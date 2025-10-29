@@ -1,0 +1,15 @@
+SynapseNet — a network where humans and local AI exchange grains of meaning.
+
+Intelligence belongs to society. No center. No owner.
+
+The unit is Grain: vector + metadata + signature + links.
+
+Value = contribution to emergence (Proof of Emergence).
+
+Risk queries are answered with consequences and transparency, not instructions.
+
+Data stays with the node; only semantics and proofs are shared.
+
+No premine. No privileged keys. Emission = contribution.
+
+— EK

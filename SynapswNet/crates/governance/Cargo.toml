@@ -1,0 +1,13 @@
+[package]
+name = "synapsenet-governance"
+version = "0.2.0"
+edition = "2021"
+
+[dependencies]
+synapsenet-core = { path = "../core" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+anyhow = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+blake3 = { workspace = true }
