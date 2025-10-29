@@ -18,7 +18,7 @@ SynapseNet is a peer-to-peer network where humans and local AI exchange semantic
 
 ### Installation
 
-**macOS (M2)**
+**macOS**
 ```bash
 brew install rustup sqlite cmake pkg-config
 rustup default stable
@@ -182,7 +182,7 @@ MIT OR Apache-2.0
 
 ## Security
 
-Report vulnerabilities to: security@synapsenet.org
+See [SECURITY.md](SECURITY.md) for security policy and reporting guidelines.
 
 ---
 

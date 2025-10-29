@@ -2,11 +2,11 @@
 
 ## Reporting Vulnerabilities
 
-If you discover a security vulnerability in SynapseNet, please report it responsibly:
+If you discover a security vulnerability in SynapseNet, please report it responsibly by opening a GitHub Security Advisory:
 
-**Email**: security@synapsenet.org
+**GitHub Security**: https://github.com/kepler463278/synapsenet/security/advisories/new
 
-**PGP Key**: [To be published]
+For sensitive issues, you can also create a private issue or contact the maintainers directly through GitHub.
 
 ## Scope
 
@@ -87,9 +87,9 @@ Not available yet. Planned for post-mainnet launch.
 
 ## Contact
 
-- **Security issues**: security@synapsenet.org
-- **General questions**: hello@synapsenet.org
-- **GitHub**: https://github.com/synapsenet/synapsenet
+- **Security issues**: https://github.com/kepler463278/synapsenet/security/advisories/new
+- **General questions**: Open an issue on GitHub
+- **GitHub**: https://github.com/kepler463278/synapsenet
 
 ---
 
