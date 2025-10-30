@@ -1,0 +1,20 @@
+[node]
+name = "synapsenet-node"
+data_dir = ".synapsenet"
+
+[p2p]
+enabled = false
+port = 9000
+mdns_enabled = true
+bootstrap_peers = []
+
+[ai]
+model_name = "all-MiniLM-L6-v2"
+embedding_dim = 384
+auto_download = false
+
+[storage]
+db_file = "synapsenet.db"
+hnsw_max_elements = 1000000
+hnsw_m = 16
+hnsw_ef_construction = 200

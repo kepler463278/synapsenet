@@ -1,0 +1,9 @@
+target/
+.git/
+.gitignore
+.synapsenet/
+.devnet/
+*.db
+*.log
+.DS_Store
+Thumbs.db
