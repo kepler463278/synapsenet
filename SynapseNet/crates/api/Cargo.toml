@@ -5,6 +5,18 @@ edition = "2021"
 
 [dependencies]
 synapsenet-core = { path = "../core" }
+synapsenet-storage = { path = "../storage" }
+synapsenet-ai = { path = "../ai" }
+synapsenet-p2p = { path = "../p2p" }
 serde = { workspace = true }
 serde_json = { workspace = true }
 anyhow = { workspace = true }
+tokio = { workspace = true }
+axum = "0.7"
+tower = "0.4"
+tower-http = { version = "0.5", features = ["cors", "trace"] }
+tracing = { workspace = true }
+prometheus = "0.13"
+lazy_static = "1.4"
+chrono = "0.4"
+hex = "0.4"

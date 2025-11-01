@@ -14,6 +14,10 @@ impl Store {
         let conn = Connection::open(path)?;
         let store = Self { conn };
         store.init_schema()?;
+        
+        // Run migrations
+        crate::migrations::run_migrations(&store.conn)?;
+        
         Ok(store)
     }
 
@@ -192,6 +196,209 @@ impl Store {
             .query_row("SELECT COUNT(*) FROM grains", [], |row| row.get(0))?;
         Ok(count)
     }
+
+    // ===== Grain Access Tracking =====
+
+    /// Record grain access event
+    pub fn record_grain_access(
+        &self,
+        grain_id: &[u8; 32],
+        peer_id: &str,
+        access_type: &str,
+    ) -> Result<()> {
+        let timestamp = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)?
+            .as_secs() as i64;
+
+        self.conn.execute(
+            "INSERT INTO grain_access (grain_id, peer_id, access_type, timestamp) VALUES (?1, ?2, ?3, ?4)",
+            params![&grain_id[..], peer_id, access_type, timestamp],
+        )?;
+        Ok(())
+    }
+
+    /// Get access events for a grain
+    pub fn get_grain_access_events(
+        &self,
+        grain_id: &[u8; 32],
+        limit: usize,
+    ) -> Result<Vec<(String, String, i64)>> {
+        let mut stmt = self.conn.prepare(
+            "SELECT peer_id, access_type, timestamp FROM grain_access 
+             WHERE grain_id = ?1 ORDER BY timestamp DESC LIMIT ?2",
+        )?;
+
+        let rows = stmt.query_map(params![&grain_id[..], limit], |row| {
+            Ok((row.get(0)?, row.get(1)?, row.get(2)?))
+        })?;
+
+        let mut result = Vec::new();
+        for row in rows {
+            result.push(row?);
+        }
+        Ok(result)
+    }
+
+    /// Get access count for a grain
+    pub fn get_grain_access_count(&self, grain_id: &[u8; 32]) -> Result<usize> {
+        let count: usize = self.conn.query_row(
+            "SELECT COUNT(*) FROM grain_access WHERE grain_id = ?1",
+            params![&grain_id[..]],
+            |row| row.get(0),
+        )?;
+        Ok(count)
+    }
+
+    /// Clean old access events (older than cutoff timestamp)
+    pub fn cleanup_old_access_events(&self, cutoff_timestamp: i64) -> Result<usize> {
+        let deleted = self.conn.execute(
+            "DELETE FROM grain_access WHERE timestamp < ?1",
+            params![cutoff_timestamp],
+        )?;
+        Ok(deleted)
+    }
+
+    // ===== Embedding Models Metadata =====
+
+    /// Register embedding model
+    pub fn register_embedding_model(
+        &self,
+        name: &str,
+        dimensions: usize,
+        file_size_mb: f64,
+    ) -> Result<()> {
+        let loaded_at = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)?
+            .as_secs() as i64;
+
+        self.conn.execute(
+            "INSERT OR REPLACE INTO embedding_models (name, dimensions, file_size_mb, loaded_at) 
+             VALUES (?1, ?2, ?3, ?4)",
+            params![name, dimensions as i64, file_size_mb, loaded_at],
+        )?;
+        Ok(())
+    }
+
+    /// Get embedding model info
+    pub fn get_embedding_model(&self, name: &str) -> Result<Option<(usize, f64, i64)>> {
+        let result = self.conn.query_row(
+            "SELECT dimensions, file_size_mb, loaded_at FROM embedding_models WHERE name = ?1",
+            params![name],
+            |row| Ok((row.get::<_, i64>(0)? as usize, row.get(1)?, row.get(2)?)),
+        );
+
+        match result {
+            Ok(data) => Ok(Some(data)),
+            Err(rusqlite::Error::QueryReturnedNoRows) => Ok(None),
+            Err(e) => Err(e.into()),
+        }
+    }
+
+    /// Get all registered models
+    pub fn get_all_embedding_models(&self) -> Result<Vec<(String, usize, f64, i64)>> {
+        let mut stmt = self.conn.prepare(
+            "SELECT name, dimensions, file_size_mb, loaded_at FROM embedding_models 
+             ORDER BY loaded_at DESC",
+        )?;
+
+        let rows = stmt.query_map([], |row| {
+            Ok((
+                row.get(0)?,
+                row.get::<_, i64>(1)? as usize,
+                row.get(2)?,
+                row.get(3)?,
+            ))
+        })?;
+
+        let mut result = Vec::new();
+        for row in rows {
+            result.push(row?);
+        }
+        Ok(result)
+    }
+
+    // ===== Peer Clusters =====
+
+    /// Insert or update peer cluster entry
+    pub fn upsert_peer_cluster(
+        &self,
+        topic: &str,
+        peer_id: &str,
+        similarity: f32,
+    ) -> Result<()> {
+        let last_seen = std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)?
+            .as_secs() as i64;
+
+        self.conn.execute(
+            "INSERT INTO peer_clusters (topic, peer_id, similarity, last_seen) 
+             VALUES (?1, ?2, ?3, ?4)
+             ON CONFLICT(topic, peer_id) DO UPDATE SET 
+             similarity = excluded.similarity, last_seen = excluded.last_seen",
+            params![topic, peer_id, similarity, last_seen],
+        )?;
+        Ok(())
+    }
+
+    /// Get peers in a cluster (topic)
+    pub fn get_cluster_peers(&self, topic: &str, limit: usize) -> Result<Vec<(String, f32, i64)>> {
+        let mut stmt = self.conn.prepare(
+            "SELECT peer_id, similarity, last_seen FROM peer_clusters 
+             WHERE topic = ?1 ORDER BY similarity DESC LIMIT ?2",
+        )?;
+
+        let rows = stmt.query_map(params![topic, limit], |row| {
+            Ok((row.get(0)?, row.get(1)?, row.get(2)?))
+        })?;
+
+        let mut result = Vec::new();
+        for row in rows {
+            result.push(row?);
+        }
+        Ok(result)
+    }
+
+    /// Get all topics for a peer
+    pub fn get_peer_topics(&self, peer_id: &str) -> Result<Vec<(String, f32)>> {
+        let mut stmt = self.conn.prepare(
+            "SELECT topic, similarity FROM peer_clusters 
+             WHERE peer_id = ?1 ORDER BY similarity DESC",
+        )?;
+
+        let rows = stmt.query_map(params![peer_id], |row| Ok((row.get(0)?, row.get(1)?)))?;
+
+        let mut result = Vec::new();
+        for row in rows {
+            result.push(row?);
+        }
+        Ok(result)
+    }
+
+    /// Clean stale cluster entries (older than cutoff timestamp)
+    pub fn cleanup_stale_clusters(&self, cutoff_timestamp: i64) -> Result<usize> {
+        let deleted = self.conn.execute(
+            "DELETE FROM peer_clusters WHERE last_seen < ?1",
+            params![cutoff_timestamp],
+        )?;
+        Ok(deleted)
+    }
+
+    /// Get cluster statistics
+    pub fn get_cluster_stats(&self) -> Result<(usize, usize)> {
+        let topic_count: usize = self.conn.query_row(
+            "SELECT COUNT(DISTINCT topic) FROM peer_clusters",
+            [],
+            |row| row.get(0),
+        )?;
+
+        let peer_count: usize = self.conn.query_row(
+            "SELECT COUNT(DISTINCT peer_id) FROM peer_clusters",
+            [],
+            |row| row.get(0),
+        )?;
+
+        Ok((topic_count, peer_count))
+    }
 }
 
 #[cfg(test)]
@@ -215,13 +422,16 @@ mod tests {
         let author_pk = signing_key.verifying_key().to_bytes();
 
         let meta = GrainMeta {
-            author_pk,
+            author_pk: author_pk.to_vec(),
+            crypto_backend: synapsenet_core::CryptoBackend::Classical,
             ts_unix_ms: 1234567890,
             tags: vec!["test".to_string()],
             mime: "text/plain".to_string(),
             lang: "en".to_string(),
             title: Some("Test".to_string()),
             summary: None,
+            embedding_model: Some("test-model".to_string()),
+            embedding_dimensions: Some(384),
         };
 
         let vec = vec![0.1, 0.2, 0.3];

@@ -112,13 +112,16 @@ mod tests {
         // Add some grains
         for i in 0..5 {
             let meta = GrainMeta {
-                author_pk,
+                author_pk: author_pk.to_vec(),
+                crypto_backend: synapsenet_core::CryptoBackend::Classical,
                 ts_unix_ms: 1234567890 + i,
                 tags: vec![],
                 mime: "text/plain".to_string(),
                 lang: "en".to_string(),
                 title: None,
                 summary: None,
+                embedding_model: Some("test-model".to_string()),
+                embedding_dimensions: Some(3),
             };
 
             let vec = vec![i as f32 * 0.1, 0.5, 0.3];

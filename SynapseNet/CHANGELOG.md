@@ -8,10 +8,201 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Planned
+- Cross-platform installers
+- Auto-update system
+- Mobile app (Tauri Mobile)
+
+## [0.4.0] - 2024-10-31
+
+### Added
+
+**Desktop Application** 🖥️
+- Native Tauri 2.0 application for macOS, Windows, Linux
+- Modern React + TypeScript UI with 7 views
+- AddGrainView - Text input with tags
+- SearchView - Semantic search interface
+- GraphView - D3.js knowledge visualization
+- StatsView - Node statistics
+- SettingsView - Configuration UI
+- MonitoringView - Real-time metrics dashboard
+- ErrorBoundary - Graceful error handling
+- Keyboard shortcuts for navigation
+
+**Multi-Model Embedding System** 🤖
+- Load multiple ONNX models simultaneously
+- Dynamic model switching without restart
+- Model registry with metadata tracking
+- Automatic dimension detection
+- Memory-efficient model management
+- Support for all-MiniLM-L6-v2 (384D)
+- Support for all-mpnet-base-v2 (768D)
+- Custom ONNX model support
+
+**Batch Processing** ⚡
+- Parallel embedding generation (4x faster)
+- Configurable batch sizes (10-1000 items)
+- Progress tracking with metrics
+- Partial success handling
+- Error recovery per item
+- REST API endpoint: `POST /v2/batch/import`
+
+**PoE v2 Economic Model** 💰
+- Three-component scoring system
+- Novelty score (40% weight) - Uniqueness
+- Coherence score (30% weight) - Connections
+- Reuse score (30% weight) - Access frequency
+- NGT reward calculation (1-11 tokens)
+- Access tracking system
+- Topic diversity rewards
+- Anti-gaming measures
+- Log-scale reuse scoring
+
+**Enhanced Configuration** ⚙️
+- NetworkConfig - DHT, relay, clustering settings
+- EconomyConfig - PoE weights and thresholds
+- UiConfig - Theme, views, preferences
+- TOML validation with helpful errors
+- Auto-migration from v0.3
+- Settings UI in desktop app
+- Configuration migration guide
+
+**Comprehensive Error Handling** 🛡️
+- SynapseNetError with typed variants
+- NetworkError, EmbeddingError, StorageError, BatchError
+- Retry with exponential backoff
+- Circuit breaker pattern
+- GPU → CPU fallback
+- Model size fallback (large → medium → small)
+- ErrorContext for debugging
+- User-friendly error messages in UI
+
+**REST API v2** 🌐
+- `GET /v2/models` - List available models
+- `GET /v2/models/:name` - Get model info
+- `POST /v2/batch/import` - Batch grain import
+- `GET /v2/poe/scores` - PoE score queries
+- `GET /v2/poe/scores/:id` - Grain PoE score
+- `GET /v2/network/peers` - Peers with clusters
+- `GET /v2/network/clusters` - Cluster information
+- Backward compatible with v1 API
+- Migration guide provided
+
+**Monitoring & Logging** 📊
+- Structured logging (JSON/Pretty formats)
+- Log levels: TRACE, DEBUG, INFO, WARN, ERROR
+- Performance spans and timers
+- Log rotation with configurable size
+- 20+ new Prometheus metrics
+- PoE v2 metrics (novelty/coherence/reuse)
+- Batch processing metrics
+- Multi-model metrics
+- Network clustering metrics
+- Real-time monitoring dashboard in UI
+
+**Storage Schema Updates** 💾
+- grain_access table for access tracking
+- embedding_models table for model metadata
+- peer_clusters table for topic clustering
+- Automatic v0.3 → v0.4 migration
+- CLI migration command: `syn migrate`
+- Backward-compatible schema
+- Access event cleanup
+
+**Documentation** 📚
+- Complete User Guide (200+ lines)
+- Quick Start Guide (5 minutes)
+- API Migration Guide (v1 → v2)
+- Troubleshooting section
+- Configuration examples
+- Best practices
+- Inline code documentation
+
+### Changed
+- Configuration file format (auto-migrates)
+- Database schema v2 → v4 (auto-migrates)
+- Improved error messages
+- Better configuration validation
+- Enhanced performance
+- Optimized memory usage
+
+### Deprecated
+- `POST /add` - Use `POST /v2/batch/import` instead
+- `GET /peers` - Use `GET /v2/network/peers` instead
+
+### Fixed
+- Memory leaks in embedding generation
+- Race conditions in P2P networking
+- Configuration validation errors
+- Search result ranking issues
+
+## [0.3.0] - 2025-11-XX
+
+### Added
+
+**GPU Acceleration** ⚡
+- CoreML execution provider for macOS (Metal backend)
+- DirectML execution provider for Windows (any GPU)
+- CUDA execution provider for Linux/Windows (NVIDIA GPUs)
+- Auto-detection of best available GPU provider
+- 2-4x speedup for embedding generation
+- GPU provider configuration in config.toml
+- `gpu_providers.rs` module with unified interface
+- GPU demo example: `cargo run --example gpu_demo`
+- Feature flags: `coreml`, `directml`, `cuda`, `gpu`
+- Documentation in `docs/GPU.md`
+
+**REST API Server** 🌐
+- Local HTTP API with Axum framework
+- Endpoints: `/init`, `/add`, `/query`, `/stats`, `/peers`, `/metrics`
+- JSON request/response format
+- CORS support for web applications
+- CLI command: `syn serve --addr 127.0.0.1:9900`
+- API state management with Arc<RwLock>
+- Automatic embedding generation on add
+- Real-time query processing
+- API examples in `API_EXAMPLES.md`
+
+**Prometheus Monitoring** 📊
+- Production-grade metrics exporter
+- Embedding metrics: duration histogram, total counter
+- Query metrics: duration histogram, total counter
+- Grain metrics: total gauge, added counter
+- P2P metrics: peers gauge, messages sent/received, drops
+- PoE metrics: reward total, novelty/coherence histograms
+- `/metrics` endpoint for Prometheus scraping
+- Ready for Grafana dashboards
+- Lazy-static metric registration
+
+**Post-Quantum Cryptography (PQC) Support** 🔐 (from v0.2)
+- Unified crypto abstraction layer supporting both classical and PQC
+- **Dilithium5** signatures (NIST ML-DSA standard) for quantum-resistant grain/link signing
+- **Kyber1024** KEM (NIST ML-KEM standard) for quantum-resistant P2P handshakes
+- Feature flags: `classical-crypto` (default), `pqc-dilithium`, `pqc-kyber`, `pqc` (all PQC)
+- `UnifiedSigningKey` and `UnifiedVerifyingKey` traits for crypto backend abstraction
+- `KyberHandshake` protocol for P2P key exchange
+- PQC demo example: `cargo run --example pqc_demo --features pqc`
+- Comprehensive PQC documentation in `docs/PQC.md`
+- Quick start guide in `PQC_QUICKSTART.md`
+- Tests for both classical and PQC crypto backends
+
+**Security Benefits:**
+- Protection against future quantum computer attacks
+- "Harvest now, decrypt later" attack mitigation
+- NIST-standardized algorithms (2024)
+- Backward compatible with classical crypto
+
+**Performance:**
+- Dilithium: ~4x slower signing, ~1.5x slower verification
+- Kyber: ~1.5x slower key exchange
+- Storage: ~70x larger signatures (mitigated by Parquet compression)
+
+### Planned
 - REST API
 - GPU acceleration (Metal/CUDA/DirectML)
 - Web UI
 - Mobile apps
+- Hybrid signatures (classical + PQC)
+- Falcon signatures (smaller than Dilithium)
 
 ## [0.2.0] - 2025-10-29
 

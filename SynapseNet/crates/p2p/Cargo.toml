@@ -16,3 +16,11 @@ tracing = { workspace = true }
 async-trait = { workspace = true }
 uuid = { version = "1.0", features = ["v4"] }
 chrono = "0.4"
+blake3 = { workspace = true }
+# Post-quantum crypto
+pqcrypto-kyber = { workspace = true, optional = true }
+pqcrypto-traits = { workspace = true, optional = true }
+
+[features]
+default = []
+pqc-kyber = ["pqcrypto-kyber", "pqcrypto-traits", "synapsenet-core/pqc-kyber"]

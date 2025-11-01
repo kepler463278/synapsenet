@@ -1,0 +1,39 @@
+{
+  "productName": "SynapseNet",
+  "version": "0.5.0",
+  "identifier": "net.synapse.mobile",
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "devUrl": "http://localhost:5173",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["ios", "android"],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/icon.png"
+    ],
+    "publisher": "SynapseNet Team",
+    "copyright": "Copyright © 2024 SynapseNet",
+    "category": "Productivity",
+    "shortDescription": "Decentralized semantic memory",
+    "longDescription": "Your personal knowledge network with on-device AI and P2P sync"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "SynapseNet",
+        "width": 375,
+        "height": 812,
+        "resizable": false,
+        "fullscreen": false
+      }
+    ],
+    "security": {
+      "csp": null
+    }
+  }
+}

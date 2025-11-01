@@ -69,6 +69,8 @@ cargo build --release
 
 ### Your First Steps
 
+#### Option 1: CLI (Traditional)
+
 ```bash
 # 1. Initialize your local node
 ./target/release/syn init
@@ -83,39 +85,68 @@ cargo build --release
 ./target/release/syn stats
 ```
 
+#### Option 2: REST API (New in v0.3!)
+
+```bash
+# 1. Start API server
+./target/release/syn serve --addr 127.0.0.1:9900
+
+# 2. Add knowledge (in another terminal)
+curl -X POST http://localhost:9900/add \
+  -H "Content-Type: application/json" \
+  -d '{"text":"Rust is a systems programming language"}'
+
+# 3. Query
+curl -X POST http://localhost:9900/query \
+  -H "Content-Type: application/json" \
+  -d '{"text":"What is Rust?", "k":5}'
+
+# 4. Check metrics
+curl http://localhost:9900/metrics
+```
+
 **That's it!** You're now part of the decentralized knowledge network. 🎉
 
 ---
 
-## ✨ What's New in v0.2
+## ✨ What's New in v0.3
 
-### 🧠 ONNX Embeddings Infrastructure
-- **Automatic model management** with download support
-- **all-MiniLM-L6-v2** integration (384-dimensional embeddings)
-- **Performance monitoring** with timing metrics and warnings
-- **Configurable parameters** via TOML configuration
+### ⚡ GPU Acceleration
+- **2-4x faster embeddings** on supported hardware
+- **CoreML** (macOS - Metal backend)
+- **DirectML** (Windows - any GPU)
+- **CUDA** (Linux/Windows - NVIDIA GPUs)
+- **Auto-detection** of best available provider
 
-### 🌐 P2P Networking (libp2p)
-- **Full P2P swarm** with mDNS peer discovery
-- **Grain broadcasting** with cryptographic signature verification
-- **Distributed KNN queries** across the network
-- **Peer reputation system** with automatic bad peer disconnection
-- **Rate limiting** (100 grains/min per peer) to prevent spam
-- **GossipSub topics**: `grains.put`, `grains.ack`, `query.knn`, `query.resp`
+### 🌐 REST API Server
+- **Local HTTP API** for easy integration
+- **Endpoints**: `/init`, `/add`, `/query`, `/stats`, `/peers`, `/metrics`
+- **JSON responses** with timing information
+- **CORS enabled** for web applications
 
-### 📦 Parquet Export/Import
-- **Export grains** to Parquet format with Snappy compression
-- **Batch processing** (10,000 grains per file) for efficiency
-- **Import with verification** - all signatures checked
-- **Columnar storage** for large-scale datasets
+### 📊 Prometheus Monitoring
+- **Production-grade metrics** for observability
+- **Embedding, query, grain, P2P, and PoE metrics**
+- **Histogram and counter** types
+- **Ready for Grafana** dashboards
 
-### ⚙️ Configuration Management
-- **TOML-based config** for all system parameters
-- **Validation** of configuration values
-- **Easy generation** with `syn config` command
-- **Environment overrides** for deployment flexibility
+### 🔐 Post-Quantum Cryptography (v0.2)
+- **Dilithium5** signatures (NIST ML-DSA)
+- **Kyber1024** key exchange (NIST ML-KEM)
+- **Optional feature** (disabled by default)
+- **Backward compatible** with classical crypto
 
-See [CHANGELOG.md](CHANGELOG.md) for complete release notes.
+### 🧠 ONNX Embeddings (v0.2)
+- **all-MiniLM-L6-v2** model (384 dimensions)
+- **Automatic model management**
+- **Performance monitoring**
+
+### 🌐 P2P Networking (v0.2)
+- **libp2p with GossipSub**
+- **Distributed queries**
+- **Peer reputation system**
+
+See [RELEASE_NOTES_v0.3.md](RELEASE_NOTES_v0.3.md) for complete release notes.
 
 ---
 
@@ -323,6 +354,28 @@ You may choose either license for your use.
 ## 🔒 Security
 
 Security is critical for a decentralized network. We take it seriously.
+
+### 🔐 Post-Quantum Cryptography (NEW!)
+
+SynapseNet now supports **quantum-resistant cryptography** to protect against future quantum computer attacks:
+
+- **Dilithium5** signatures (NIST ML-DSA standard)
+- **Kyber1024** key exchange (NIST ML-KEM standard)
+- **blake3** hashing (already quantum-resistant)
+
+**Enable PQC:**
+```bash
+# Build with PQC support
+cargo build --features pqc
+
+# Run PQC demo
+cargo run --example pqc_demo --features pqc
+```
+
+**Quick Start:** See [PQC_QUICKSTART.md](PQC_QUICKSTART.md)  
+**Full Documentation:** See [docs/PQC.md](docs/PQC.md)
+
+### Vulnerability Reporting
 
 **Found a vulnerability?** Please report it responsibly:
 

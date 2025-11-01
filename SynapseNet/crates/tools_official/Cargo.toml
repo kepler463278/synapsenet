@@ -1,0 +1,18 @@
+[package]
+name = "synapsenet-tools-official"
+version = "0.7.0"
+edition = "2021"
+
+[dependencies]
+synapsenet-agent = { path = "../agent" }
+async-trait = "0.1"
+chrono = "0.4"
+reqwest = { version = "0.11", features = ["json"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tokio = { version = "1.0", features = ["full"] }
+url = "2.4"
+uuid = { version = "1.0", features = ["v4", "serde"] }
+
+[dev-dependencies]
+tokio-test = "0.4"

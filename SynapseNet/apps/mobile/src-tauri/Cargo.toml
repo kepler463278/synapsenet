@@ -1,0 +1,26 @@
+[package]
+name = "synapsenet-mobile"
+version = "0.5.0"
+edition = "2021"
+
+[build-dependencies]
+tauri-build = { version = "2.0.0-beta", features = [] }
+
+[dependencies]
+tauri = { version = "2.0.0-beta", features = ["mobile"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tokio = { version = "1.36", features = ["full"] }
+anyhow = "1.0"
+tracing = "0.1"
+
+# SynapseNet crates
+synapsenet-core = { path = "../../../crates/core" }
+synapsenet-ai = { path = "../../../crates/ai" }
+synapsenet-storage = { path = "../../../crates/storage" }
+synapsenet-p2p = { path = "../../../crates/p2p" }
+synapsenet-economy = { path = "../../../crates/economy" }
+
+[features]
+default = ["custom-protocol"]
+custom-protocol = ["tauri/custom-protocol"]

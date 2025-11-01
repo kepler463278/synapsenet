@@ -17,13 +17,22 @@ members = [
     "crates/governance",
     "crates/api",
     "crates/cli",
+    "apps/desktop/src-tauri",
+]
+exclude = [
+    "crates/tauri-app",
 ]
 
 [workspace.dependencies]
-# Crypto
+# Crypto - Classical
 ed25519-dalek = "2.1"
 blake3 = "1.5"
 rand = "0.8"
+
+# Crypto - Post-Quantum (PQC)
+pqcrypto-dilithium = "0.5"
+pqcrypto-kyber = "0.8"
+pqcrypto-traits = "0.3"
 
 # Storage
 rusqlite = { version = "0.31", features = ["bundled"] }
@@ -31,7 +40,7 @@ parquet = "53.0"
 arrow = "53.0"
 
 # P2P
-libp2p = { version = "0.53", features = ["gossipsub", "mdns", "noise", "tcp", "yamux", "macros", "identify", "tokio"] }
+libp2p = { version = "0.53", features = ["gossipsub", "mdns", "noise", "tcp", "yamux", "macros", "identify", "tokio", "kad"] }
 tokio = { version = "1.36", features = ["full"] }
 futures = "0.3"
 
@@ -66,6 +75,7 @@ async-trait = "0.1"
 synapsenet-core = { path = "crates/core" }
 synapsenet-p2p = { path = "crates/p2p" }
 synapsenet-storage = { path = "crates/storage" }
+synapsenet-ai = { path = "crates/ai" }
 synapsenet-governance = { path = "crates/governance" }
 synapsenet-economy = { path = "crates/economy" }
 ed25519-dalek = { workspace = true }
@@ -76,6 +86,8 @@ tracing = { workspace = true }
 tracing-subscriber = { workspace = true }
 chrono = "0.4"
 futures = { workspace = true }
+criterion = { version = "0.5", features = ["html_reports"] }
+tempfile = "3.8"
 
 [[example]]
 name = "basic_usage"
@@ -105,6 +117,14 @@ path = "examples/p2p_query.rs"
 name = "p2p_with_storage"
 path = "examples/p2p_with_storage.rs"
 
+[[example]]
+name = "pqc_demo"
+path = "examples/pqc_demo.rs"
+
+[[example]]
+name = "gpu_demo"
+path = "examples/gpu_demo.rs"
+
 [profile.release]
 opt-level = 3
 lto = true
@@ -112,8 +132,21 @@ codegen-units = 1
 strip = true
 
 [features]
-default = ["hnsw"]
+default = ["hnsw", "classical-crypto"]
 hnsw = []
 faiss = []
-gpu-ort = []
 ui = []
+# Crypto features
+classical-crypto = ["synapsenet-core/classical-crypto"]
+pqc = ["pqc-dilithium", "pqc-kyber"]
+pqc-dilithium = ["synapsenet-core/pqc-dilithium"]
+pqc-kyber = ["synapsenet-core/pqc-kyber", "synapsenet-p2p/pqc-kyber"]
+# GPU features
+gpu = []
+coreml = ["synapsenet-ai/coreml", "gpu"]
+directml = ["synapsenet-ai/directml", "gpu"]
+cuda = ["synapsenet-ai/cuda", "gpu"]
+
+[[bench]]
+name = "performance_benchmarks"
+harness = false

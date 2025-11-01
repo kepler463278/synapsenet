@@ -1,0 +1,92 @@
+{
+  "app": {
+    "name": "SynapseNet",
+    "tagline": "Tu Red Personal de Conocimiento"
+  },
+  "nav": {
+    "home": "Inicio",
+    "add": "Añadir",
+    "search": "Buscar",
+    "peers": "Pares",
+    "wallet": "Cartera",
+    "settings": "Ajustes"
+  },
+  "home": {
+    "title": "SynapseNet",
+    "grains": "Granos",
+    "peers": "Pares",
+    "storage": "MB Usado",
+    "battery": "Batería",
+    "networkStatus": "Estado de Red",
+    "quickActions": "Acciones Rápidas",
+    "addKnowledge": "Añadir Conocimiento",
+    "loading": "Cargando..."
+  },
+  "add": {
+    "title": "Añadir Conocimiento",
+    "yourKnowledge": "Tu Conocimiento",
+    "placeholder": "Ingresa tu conocimiento aquí...",
+    "tags": "Etiquetas (separadas por comas)",
+    "tagsPlaceholder": "ia, aprendizaje-automático, rust",
+    "addGrain": "Añadir Grano",
+    "adding": "Añadiendo...",
+    "success": "¡Conocimiento añadido exitosamente!",
+    "error": "Error",
+    "enterText": "Por favor ingresa algún texto",
+    "tips": "Consejos",
+    "tip1": "Sé específico y claro",
+    "tip2": "Añade etiquetas relevantes para mejor búsqueda",
+    "tip3": "Tus datos están cifrados localmente"
+  },
+  "query": {
+    "title": "Buscar Conocimiento",
+    "placeholder": "Busca en tu conocimiento...",
+    "searching": "Buscando...",
+    "noResults": "Aún no hay resultados. ¡Intenta buscar!",
+    "similarity": "similitud"
+  },
+  "wallet": {
+    "title": "Cartera",
+    "balance": "Saldo NGT",
+    "pending": "pendiente",
+    "totalEarned": "Total Ganado",
+    "avgScore": "Puntuación PoE Promedio",
+    "sync": "Sincronizar Recompensas",
+    "syncing": "Sincronizando...",
+    "export": "Exportar",
+    "rewardHistory": "Historial de Recompensas",
+    "noRewards": "Aún no hay recompensas",
+    "rewardHint": "¡Añade granos para empezar a ganar NGT!",
+    "synced": "Sincronizado",
+    "breakdown": "Desglose PoE",
+    "novelty": "Contribución de Novedad",
+    "coherence": "Contribución de Coherencia",
+    "reuseBonus": "Bonificación por Reutilización",
+    "total": "Total",
+    "close": "Cerrar"
+  },
+  "settings": {
+    "title": "Ajustes",
+    "privacy": "Privacidad",
+    "backup": "Respaldo",
+    "about": "Acerca de",
+    "version": "Versión",
+    "build": "Compilación",
+    "license": "Licencia"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "done": "Hecho",
+    "retry": "Reintentar",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "skip": "Omitir",
+    "confirm": "Confirmar"
+  }
+}

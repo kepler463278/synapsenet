@@ -1,0 +1,38 @@
+# SynapseNet Mobile App
+
+This directory will contain the Tauri Mobile application for iOS and Android.
+
+## Setup
+
+```bash
+# Install Rust mobile targets
+rustup target add aarch64-apple-ios x86_64-apple-ios
+rustup target add aarch64-linux-android armv7-linux-androideabi
+
+# Install tools
+cargo install cargo-ndk
+cargo install tauri-cli --version "^2.0.0-beta"
+
+# Initialize Tauri Mobile project
+cargo tauri init --mobile
+```
+
+## Development
+
+```bash
+# iOS
+cargo tauri ios dev
+
+# Android
+cargo tauri android dev
+```
+
+## Build
+
+```bash
+# iOS
+cargo tauri ios build --release
+
+# Android
+cargo tauri android build --release
+```

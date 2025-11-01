@@ -15,3 +15,7 @@ hnsw_rs = { workspace = true }
 parquet = { workspace = true }
 arrow = { workspace = true }
 tracing = { workspace = true }
+
+[dev-dependencies]
+ed25519-dalek = { workspace = true }
+rand = { workspace = true }

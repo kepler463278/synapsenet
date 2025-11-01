@@ -3,8 +3,9 @@ use clap::{Parser, Subcommand};
 use ed25519_dalek::SigningKey;
 use rand::{rngs::OsRng, RngCore};
 use std::path::PathBuf;
+use std::sync::{Arc, Mutex};
 use synapsenet_ai::{EmbeddingModel, OnnxEmbedding};
-use synapsenet_core::{Grain, GrainMeta};
+use synapsenet_core::{CryptoBackend, Grain, GrainMeta};
 use synapsenet_storage::{HnswIndex, Store};
 use tracing::{info, Level};
 
@@ -71,6 +72,20 @@ enum Commands {
     
     /// Show node statistics and metrics
     Stats,
+
+    /// Start REST API server
+    Serve {
+        /// Server address
+        #[arg(short, long, default_value = "127.0.0.1:9900")]
+        addr: String,
+    },
+
+    /// Migrate database from v0.3 to v0.4
+    Migrate {
+        /// Database path (optional, defaults to data_dir/grains.db)
+        #[arg(short, long)]
+        db_path: Option<PathBuf>,
+    },
 }
 
 #[tokio::main]
@@ -89,6 +104,8 @@ async fn main() -> Result<()> {
         Commands::Import { input } => import_grains(&cli.data_dir, &input).await,
         Commands::Config { output } => generate_config(&output).await,
         Commands::Stats => show_stats(&cli.data_dir).await,
+        Commands::Serve { addr } => serve_api(&cli.data_dir, &addr).await,
+        Commands::Migrate { db_path } => migrate_database(&cli.data_dir, db_path).await,
     }
 }
 
@@ -129,7 +146,7 @@ async fn add_grain(data_dir: &PathBuf, input: &str) -> Result<()> {
     let key_path = data_dir.join("node.key");
     let key_bytes = std::fs::read(&key_path)?;
     let signing_key = SigningKey::from_bytes(&key_bytes.try_into().unwrap());
-    let author_pk = signing_key.verifying_key().to_bytes();
+    let author_pk = signing_key.verifying_key().to_bytes().to_vec();
 
     // Read input (file or text)
     let content = if std::path::Path::new(input).exists() {
@@ -138,9 +155,14 @@ async fn add_grain(data_dir: &PathBuf, input: &str) -> Result<()> {
         input.to_string()
     };
 
+    // Generate embedding using ONNX model
+    let embedding = OnnxEmbedding::new(data_dir.clone()).await?;
+    let vec = embedding.embed(&content)?;
+
     // Create metadata
     let meta = GrainMeta {
         author_pk,
+        crypto_backend: CryptoBackend::Classical,
         ts_unix_ms: std::time::SystemTime::now()
             .duration_since(std::time::UNIX_EPOCH)?
             .as_millis() as i64,
@@ -149,11 +171,9 @@ async fn add_grain(data_dir: &PathBuf, input: &str) -> Result<()> {
         lang: "en".to_string(),
         title: Some(content.chars().take(50).collect()),
         summary: None,
+        embedding_model: Some("all-MiniLM-L6-v2".to_string()),
+        embedding_dimensions: Some(vec.len()),
     };
-
-    // Generate embedding using ONNX model
-    let embedding = OnnxEmbedding::new(data_dir.clone()).await?;
-    let vec = embedding.embed(&content)?;
 
     // Create grain
     let grain = Grain::new(vec, meta, &signing_key)?;
@@ -443,5 +463,138 @@ async fn show_stats(data_dir: &PathBuf) -> Result<()> {
     // Display metrics
     println!("{}", metrics.format());
     
+    Ok(())
+}
+
+
+async fn serve_api(data_dir: &PathBuf, addr: &str) -> Result<()> {
+    use std::sync::Arc;
+    use tokio::sync::RwLock;
+    use synapsenet_api::{create_router, create_metrics_router, ApiState};
+    
+    info!("Starting REST API server on {}", addr);
+    
+    // Load signing key
+    let key_path = data_dir.join("node.key");
+    if !key_path.exists() {
+        return Err(anyhow::anyhow!("Node not initialized. Run 'syn init' first."));
+    }
+    
+    let key_bytes = std::fs::read(&key_path)?;
+    let signing_key = match key_bytes.len() {
+        32 => {
+            // Classical ed25519
+            #[cfg(feature = "classical-crypto")]
+            {
+                use ed25519_dalek::SigningKey;
+                let sk = SigningKey::from_bytes(&key_bytes.try_into().unwrap());
+                synapsenet_core::UnifiedSigningKey::Classical(
+                    synapsenet_core::crypto::classical::ClassicalSigningKey::new(sk)
+                )
+            }
+            #[cfg(not(feature = "classical-crypto"))]
+            {
+                return Err(anyhow::anyhow!("Classical crypto not enabled"));
+            }
+        }
+        _ => {
+            return Err(anyhow::anyhow!("Unsupported key format"));
+        }
+    };
+    
+    // Open database
+    let db_path = data_dir.join("synapsenet.db");
+    let store = Store::new(&db_path.to_string_lossy())?;
+    
+    // Load grains and build index
+    let grains = store.get_all_grains()?;
+    let mut index = if grains.is_empty() {
+        HnswIndex::new(1000, 384)
+    } else {
+        let mut idx = HnswIndex::new(grains.len(), 384);
+        for grain in &grains {
+            idx.add(grain)?;
+        }
+        idx
+    };
+    
+    info!("Loaded {} grains", grains.len());
+    
+    // Create embedding model
+    let embedding = OnnxEmbedding::new(data_dir.clone()).await?;
+    
+    // Create API state
+    let state = Arc::new(ApiState {
+        store: Arc::new(Mutex::new(store)),
+        embedding: Arc::new(embedding),
+        signing_key: Arc::new(signing_key),
+        index: Arc::new(tokio::sync::RwLock::new(index)),
+    });
+    
+    // Create routers
+    let api_router = create_router(state);
+    let metrics_router = create_metrics_router();
+    
+    // Combine routers
+    let app = api_router.merge(metrics_router);
+    
+    // Start server
+    let listener = tokio::net::TcpListener::bind(addr).await?;
+    
+    println!("\n🚀 SynapseNet REST API Server");
+    println!("================================");
+    println!("Address:  http://{}", addr);
+    println!("Metrics:  http://{}/metrics", addr);
+    println!("\nEndpoints:");
+    println!("  POST /init");
+    println!("  POST /add");
+    println!("  POST /query");
+    println!("  GET  /stats");
+    println!("  GET  /peers");
+    println!("  GET  /metrics");
+    println!("\nPress Ctrl+C to stop\n");
+    
+    axum::serve(listener, app).await?;
+    
+    Ok(())
+}
+
+async fn migrate_database(data_dir: &PathBuf, db_path: Option<PathBuf>) -> Result<()> {
+    use synapsenet_storage::{migrate_v03_to_v04, needs_migration};
+
+    let db_file = db_path.unwrap_or_else(|| data_dir.join("synapsenet.db"));
+
+    info!("Checking database migration status: {:?}", db_file);
+
+    if !db_file.exists() {
+        println!("❌ Database not found: {:?}", db_file);
+        println!("   Run 'syn init' to create a new database.");
+        return Ok(());
+    }
+
+    let db_path_str = db_file.to_string_lossy().to_string();
+
+    if !needs_migration(&db_path_str)? {
+        println!("✅ Database is already up to date (v0.4)");
+        println!("   No migration needed.");
+        return Ok(());
+    }
+
+    println!("\n🔄 Migrating database from v0.3 to v0.4");
+    println!("========================================");
+    println!("Database: {:?}", db_file);
+    println!("\nThis will:");
+    println!("  • Create new tables (grain_access, embedding_models, peer_clusters)");
+    println!("  • Add default embedding metadata");
+    println!("  • Update schema version");
+    println!("\n⚠️  Backup recommended before proceeding!");
+    println!("\nStarting migration...\n");
+
+    migrate_v03_to_v04(&db_path_str)?;
+
+    println!("\n✅ Migration complete!");
+    println!("   Your database is now compatible with v0.4");
+    println!("   All existing grains have been preserved.");
+
     Ok(())
 }

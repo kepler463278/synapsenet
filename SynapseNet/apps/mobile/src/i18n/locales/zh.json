@@ -1,0 +1,92 @@
+{
+  "app": {
+    "name": "SynapseNet",
+    "tagline": "您的个人知识网络"
+  },
+  "nav": {
+    "home": "主页",
+    "add": "添加",
+    "search": "搜索",
+    "peers": "节点",
+    "wallet": "钱包",
+    "settings": "设置"
+  },
+  "home": {
+    "title": "SynapseNet",
+    "grains": "知识粒",
+    "peers": "节点",
+    "storage": "已用空间",
+    "battery": "电池",
+    "networkStatus": "网络状态",
+    "quickActions": "快速操作",
+    "addKnowledge": "添加知识",
+    "loading": "加载中..."
+  },
+  "add": {
+    "title": "添加知识",
+    "yourKnowledge": "您的知识",
+    "placeholder": "在此输入您的知识...",
+    "tags": "标签（逗号分隔）",
+    "tagsPlaceholder": "人工智能, 机器学习, rust",
+    "addGrain": "添加知识粒",
+    "adding": "添加中...",
+    "success": "知识添加成功！",
+    "error": "错误",
+    "enterText": "请输入一些文本",
+    "tips": "提示",
+    "tip1": "具体明确",
+    "tip2": "添加相关标签以便更好地搜索",
+    "tip3": "您的数据在本地加密"
+  },
+  "query": {
+    "title": "搜索知识",
+    "placeholder": "搜索您的知识...",
+    "searching": "搜索中...",
+    "noResults": "暂无结果。试试搜索！",
+    "similarity": "相似度"
+  },
+  "wallet": {
+    "title": "钱包",
+    "balance": "NGT 余额",
+    "pending": "待处理",
+    "totalEarned": "总收益",
+    "avgScore": "平均 PoE 分数",
+    "sync": "同步奖励",
+    "syncing": "同步中...",
+    "export": "导出",
+    "rewardHistory": "奖励历史",
+    "noRewards": "暂无奖励",
+    "rewardHint": "添加知识粒开始赚取 NGT！",
+    "synced": "已同步",
+    "breakdown": "PoE 明细",
+    "novelty": "新颖度贡献",
+    "coherence": "一致性贡献",
+    "reuseBonus": "重用奖励",
+    "total": "总计",
+    "close": "关闭"
+  },
+  "settings": {
+    "title": "设置",
+    "privacy": "隐私",
+    "backup": "备份",
+    "about": "关于",
+    "version": "版本",
+    "build": "构建",
+    "license": "许可证"
+  },
+  "common": {
+    "loading": "加载中...",
+    "error": "错误",
+    "success": "成功",
+    "cancel": "取消",
+    "save": "保存",
+    "delete": "删除",
+    "edit": "编辑",
+    "done": "完成",
+    "retry": "重试",
+    "back": "返回",
+    "next": "下一步",
+    "skip": "跳过",
+    "confirm": "确认"
+  }
+}

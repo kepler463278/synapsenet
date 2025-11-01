@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentation - SynapseNet</title>
+  <meta name="description" content="SynapseNet documentation and technical details">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="nav">
+    <a href="/">Home</a>
+    <a href="/download.html">Download</a>
+    <a href="/docs.html">Docs</a>
+    <a href="/whitepaper.html">Whitepaper</a>
+    <a href="/join.html">Join</a>
+  </nav>
+
+  <h1>Documentation</h1>
+
+  <h2>Getting Started</h2>
+
+  <h3>Installation</h3>
+  <p>
+    Download the appropriate version for your operating system from the
+    <a href="/download.html">download page</a> and follow the installation instructions.
+  </p>
+
+  <h3>First Run</h3>
+  <ol>
+    <li>Launch SynapseNet</li>
+    <li>Click "Start Node" to connect to the network</li>
+    <li>Wait for initial synchronization (usually 1-2 minutes)</li>
+    <li>You're now part of the network!</li>
+  </ol>
+
+  <h3>Adding Knowledge</h3>
+  <ol>
+    <li>Go to the "Add" tab</li>
+    <li>Enter your knowledge, insights, or ideas</li>
+    <li>Click "Add to Network"</li>
+    <li>Your grain will be broadcast to peers and you'll earn NGT</li>
+  </ol>
+
+  <h3>Searching Network</h3>
+  <ol>
+    <li>Go to the "Knowledge" tab</li>
+    <li>Enter your search query</li>
+    <li>Results will show grains from both local storage and network peers</li>
+    <li>Each result shows confidence score and source</li>
+  </ol>
+
+  <h2>Architecture</h2>
+
+  <h3>Overview</h3>
+  <p>
+    SynapseNet is a peer-to-peer network with no central servers. Each node:
+  </p>
+  <ul>
+    <li>Stores grains locally</li>
+    <li>Connects directly to other nodes</li>
+    <li>Participates in swarm consensus</li>
+    <li>Earns rewards for contributions</li>
+  </ul>
+
+  <h3>Components</h3>
+  <ul>
+    <li><strong>P2P Network:</strong> Direct peer-to-peer connections using libp2p</li>
+    <li><strong>Storage:</strong> Local-first storage with SQLite</li>
+    <li><strong>AI Layer:</strong> Embedding-based semantic search and reasoning</li>
+    <li><strong>Swarm Intelligence:</strong> Distributed consensus mechanism</li>
+    <li><strong>PoE System:</strong> Proof-of-Emergence reward calculation</li>
+  </ul>
+
+  <h2>P2P Protocol</h2>
+
+  <h3>Connection</h3>
+  <p>
+    Nodes discover each other through:
+  </p>
+  <ul>
+    <li>Bootstrap nodes (initial connection)</li>
+    <li>DHT (Distributed Hash Table)</li>
+    <li>Peer exchange</li>
+  </ul>
+
+  <h3>Message Types</h3>
+  <ul>
+    <li><strong>Grain Broadcast:</strong> Share new knowledge</li>
+    <li><strong>Query Request:</strong> Search for information</li>
+    <li><strong>Swarm Formation:</strong> Create collective intelligence</li>
+    <li><strong>Validation:</strong> Confirm grain quality</li>
+  </ul>
+
+  <h2>PoE Economics</h2>
+
+  <h3>How Rewards Work</h3>
+  <p>
+    Network Growth Tokens (NGT) are earned through Proof-of-Emergence:
+  </p>
+
+  <h4>Novel Grains</h4>
+  <p>
+    Reward = base_reward × novelty_score × network_multiplier
+  </p>
+  <ul>
+    <li>base_reward: 0.1 NGT</li>
+    <li>novelty_score: 0.0 to 10.0 (from semantic analysis)</li>
+    <li>network_multiplier: 1.0 + (peers / 1000)</li>
+  </ul>
+
+  <h4>Validation</h4>
+  <p>
+    0.01 to 0.1 NGT per validation, based on grain importance
+  </p>
+
+  <h4>Query Answers</h4>
+  <p>
+    0.05 to 0.5 NGT per answer, based on query complexity
+  </p>
+
+  <h4>Swarm Consensus</h4>
+  <p>
+    0.1 to 2.0 NGT per participation, based on swarm size and complexity
+  </p>
+
+  <h3>Important Notes</h3>
+  <ul>
+    <li>NGT cannot be bought or sold</li>
+    <li>NGT can only be earned through contribution</li>
+    <li>NGT represents recognition of value, not speculation</li>
+    <li>No blockchain, no mining, no staking</li>
+  </ul>
+
+  <h2>API Reference</h2>
+
+  <h3>Node Control</h3>
+  <pre><code>// Start node
+await invoke('start_node')
+
+// Stop node
+await invoke('stop_node')
+
+// Get status
+const status = await invoke('get_node_status')</code></pre>
+
+  <h3>Knowledge Operations</h3>
+  <pre><code>// Search grains
+const results = await invoke('search_grains', {
+  query: 'artificial intelligence',
+  limit: 20
+})
+
+// Add grain
+const grainId = await invoke('add_grain', {
+  content: 'Your knowledge here'
+})</code></pre>
+
+  <h3>Rewards</h3>
+  <pre><code>// Get balance
+const balance = await invoke('get_balance')
+
+// Get reward history
+const rewards = await invoke('get_rewards', {
+  limit: 50
+})</code></pre>
+
+  <h2>FAQ</h2>
+
+  <h3>Is my data private?</h3>
+  <p>
+    Yes. All data is stored locally on your device. When you share grains, you choose
+    what to share. The network cannot access your private data.
+  </p>
+
+  <h3>Do I need to keep the node running?</h3>
+  <p>
+    No. You can start and stop the node anytime. When offline, you can still search
+    local grains and view your rewards.
+  </p>
+
+  <h3>How much disk space does it use?</h3>
+  <p>
+    The application is ~100MB. Each grain is typically 1-10KB. 1000 grains = ~10MB.
+  </p>
+
+  <h3>Can I run multiple nodes?</h3>
+  <p>
+    Yes, but each node should have its own data directory. Running multiple nodes
+    from the same device doesn't increase rewards.
+  </p>
+
+  <h3>What if I lose my data?</h3>
+  <p>
+    Your grains are stored locally. Back up your data directory regularly. Grains
+    you've shared are also stored by peers who received them.
+  </p>
+
+  <h2>Troubleshooting</h2>
+
+  <h3>Node won't start</h3>
+  <ul>
+    <li>Check your internet connection</li>
+    <li>Ensure ports 9900-9910 are not blocked</li>
+    <li>Try restarting the application</li>
+  </ul>
+
+  <h3>No peers connecting</h3>
+  <ul>
+    <li>Check firewall settings</li>
+    <li>Wait a few minutes for peer discovery</li>
+    <li>Ensure you're not behind a restrictive NAT</li>
+  </ul>
+
+  <h3>Search returns no results</h3>
+  <ul>
+    <li>Ensure node is running and connected</li>
+    <li>Try different search terms</li>
+    <li>Wait for network synchronization</li>
+  </ul>
+
+  <h2>Contributing</h2>
+  <p>
+    SynapseNet is open source. Contributions are welcome:
+  </p>
+  <ul>
+    <li>Report bugs on <a href="https://github.com/synapsenet/synapsenet/issues">GitHub Issues</a></li>
+    <li>Submit pull requests</li>
+    <li>Improve documentation</li>
+    <li>Share your ideas</li>
+  </ul>
+
+  <div class="footer">
+    <p>
+      <a href="https://github.com/synapsenet/synapsenet">Source Code</a> |
+      <a href="/whitepaper.html">Genesis Manifest</a> |
+      <a href="/">Home</a>
+    </p>
+    <p>SynapseNet v1.0 - November 1, 2024</p>
+  </div>
+</body>
+</html>

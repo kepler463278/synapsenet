@@ -1,147 +1,84 @@
-# Quick Start Guide
+# SynapseNet Quick Start Guide
 
-Get SynapseNet running in 5 minutes.
+Get up and running with SynapseNet in 5 minutes!
 
-## 1. Install Dependencies
+## 1. Install
 
 ### macOS
 ```bash
-brew install rustup sqlite cmake pkg-config
-rustup-init
-rustup default stable
+brew install synapsenet
+# or download .dmg from releases
+```
+
+### Windows
+```bash
+# Download .msi installer from releases
+# Double-click to install
 ```
 
 ### Linux
 ```bash
-sudo apt-get install build-essential pkg-config libsqlite3-dev cmake
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-source $HOME/.cargo/env
+# Debian/Ubuntu
+sudo dpkg -i synapsenet_0.4.0_amd64.deb
+
+# Or use AppImage
+chmod +x SynapseNet-0.4.0.AppImage
+./SynapseNet-0.4.0.AppImage
 ```
 
-### Windows
-1. Install Rust from https://rustup.rs
-2. Install Visual Studio Build Tools
-3. Install SQLite and CMake
+## 2. First Launch
 
-## 2. Build
+1. **Launch** SynapseNet
+2. **Choose** data directory (default: `~/.synapsenet`)
+3. **Wait** for model download (~22MB)
+4. **Done!** Ready to use
 
-```bash
-git clone https://github.com/synapsenet/synapsenet.git
-cd synapsenet
-cargo build --release
-```
+## 3. Add Your First Knowledge
 
-## 3. Initialize Node
+1. Click **➕ Add**
+2. Type: `"Rust prevents data races at compile time"`
+3. Tags: `rust, programming`
+4. Click **Add Grain**
 
-```bash
-./target/release/syn init
-```
+✅ Your first grain is stored!
 
-This creates:
-- `.synapsenet/node.key` - Your private key (keep safe!)
-- `.synapsenet/node.pub` - Your public key
-- `.synapsenet/synapsenet.db` - Local database
+## 4. Search
 
-## 4. Add Knowledge
+1. Click **🔍 Search**
+2. Type: `"memory safety"`
+3. See your grain appear!
 
-```bash
-# Add text
-./target/release/syn add "Rust is a systems programming language focused on safety and performance"
+🎯 Semantic search finds related concepts!
 
-# Add file
-./target/release/syn add README.md
+## 5. Explore
 
-# Add more
-./target/release/syn add "Python is great for data science and machine learning"
-./target/release/syn add "JavaScript runs in browsers and on servers with Node.js"
-```
-
-## 5. Query
-
-```bash
-./target/release/syn query "What is Rust?"
-```
-
-Output:
-```
-Found 1 results:
-
-1. Similarity: 0.923
-   ID: a1b2c3d4e5f6...
-   Title: Rust is a systems programming language...
-```
-
-## 6. Try More Queries
-
-```bash
-./target/release/syn query "programming languages" --k 5
-./target/release/syn query "data science"
-./target/release/syn query "web development"
-```
-
-## 7. Check Status
-
-```bash
-./target/release/syn peers
-```
-
-## 8. DevNet (Multi-Node Testing)
-
-### macOS/Linux
-```bash
-./scripts/devnet.sh start
-```
-
-### Windows
-```powershell
-.\scripts\devnet.ps1 start
-```
-
-This starts 3 local nodes. Try:
-
-```bash
-# Add to node 1
-syn --data-dir .devnet/node1 add "Hello from node 1"
-
-# Query from node 2
-syn --data-dir .devnet/node2 query "Hello"
-```
+- **🕸️ Graph** - Visualize connections
+- **📊 Stats** - View metrics
+- **⚙️ Settings** - Customize
 
 ## Next Steps
 
-- Read [ARCHITECTURE.md](ARCHITECTURE.md) to understand how it works
-- Check [API.md](API.md) for detailed API reference
-- See [ROADMAP.md](ROADMAP.md) for upcoming features
-- Join the community and contribute!
+- 📖 Read the [User Guide](USER_GUIDE.md)
+- 🚀 Try [batch import](USER_GUIDE.md#batch-import)
+- 🌐 Enable [P2P networking](USER_GUIDE.md#enable-p2p-networking)
+- 💰 Learn about [PoE rewards](USER_GUIDE.md#poe-rewards)
 
-## Troubleshooting
+## Common Commands
 
-### "command not found: cargo"
-Make sure Rust is installed and in your PATH:
 ```bash
-source $HOME/.cargo/env
+# CLI usage
+syn add "Your knowledge"
+syn query "search term"
+syn stats
+syn export --output ./backup
 ```
 
-### "error: linker `cc` not found"
-Install build tools:
-```bash
-# macOS
-xcode-select --install
+## Need Help?
 
-# Linux
-sudo apt-get install build-essential
-```
-
-### "No grains in local memory"
-Add some grains first with `syn add`.
-
-## Tips
-
-1. **Backup your keys**: Copy `.synapsenet/node.key` to a safe place
-2. **Use absolute paths**: For data-dir if running from different locations
-3. **Start small**: Add 10-20 grains to test, then scale up
-4. **Check logs**: Use `RUST_LOG=info syn query "test"` for debug output
+- 📖 [Full Documentation](USER_GUIDE.md)
+- 💬 [Discord Community](https://discord.gg/synapsenet)
+- 🐛 [Report Issues](https://github.com/yourusername/synapsenet/issues)
 
 ---
 
-Happy knowledge sharing! 🧠✨
+**That's it!** You're ready to build your semantic memory. 🧠✨

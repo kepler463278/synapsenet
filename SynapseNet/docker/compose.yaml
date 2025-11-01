@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  chain:
+    image: cosmwasm/wasmd:latest
+    container_name: synapsenet-chain
+    ports:
+      - "26657:26657"  # RPC
+      - "1317:1317"    # REST API
+      - "9090:9090"    # gRPC
+    volumes:
+      - chain-data:/root/.wasmd
+      - ./scripts:/scripts
+    command: >
+      sh -c "
+      if [ ! -d /root/.wasmd/config ]; then
+        /scripts/init-chain.sh
+      fi &&
+      wasmd start --rpc.laddr tcp://0.0.0.0:26657
+      "
+    networks:
+      - synapsenet
+
+  faucet:
+    image: synapsenet/faucet:latest
+    container_name: synapsenet-faucet
+    ports:
+      - "8000:8000"
+    environment:
+      - CHAIN_RPC=http://chain:26657
+      - CHAIN_ID=synapsenet-testnet-1
+      - DENOM=ungt
+      - AMOUNT=1000000000
+    depends_on:
+      - chain
+    networks:
+      - synapsenet
+
+  explorer:
+    image: forbole/big-dipper:latest
+    container_name: synapsenet-explorer
+    ports:
+      - "3000:3000"
+    environment:
+      - CHAIN_RPC=http://chain:26657
+      - CHAIN_REST=http://chain:1317
+      - CHAIN_ID=synapsenet-testnet-1
+    depends_on:
+      - chain
+    networks:
+      - synapsenet
+
+volumes:
+  chain-data:
+
+networks:
+  synapsenet:
+    driver: bridge
