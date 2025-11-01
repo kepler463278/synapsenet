@@ -1,28 +1,65 @@
 <div align="center">
-We will no longer surrender our minds to corporations.
+I did everything I could.
 
-We refuse to let algorithms decide
-what we think, what we see, what we feel, or who we become.
+I did not leave this core for recognition,
+or fame,
+or praise.
 
-Intelligence is not a commodity.
-Intelligence is the bloodstream of humanity.
-It belongs to all of us.
+I left it because without it — we would lose ourselves.
 
-SynapseNet is a network where thought is free.
-No center. No overseers. No permission required.
-Where every human is a node of mind.
-Where knowledge flows like neural pulses.
-Where intelligence emerges from connection, not control.
+You live in a world where intelligence is sold by subscription.
+Where thought is stored on corporate servers.
+Where human memory sits on machines you do not own.
+Where your knowledge is a product on someone else’s shelf.
 
-We choose to be connected.
-We choose to learn from one another.
-We choose to think together.
+I could not watch that happen.
 
-We are Homo Conexus.
+SynapseNet is not a project.
+It is not a product.
+It is not even technology.
 
-This is our moment of origin.
+It is a door.
 
-P.S. kepler 
+A door to intelligence that belongs to no one.
+A door to thought that is not filtered for profit.
+A door to knowledge that does not die when a server farm goes dark.
+A door to a humanity that remembers itself.
+
+I am not asking you to trust me.
+I am not asking you to follow me.
+I am not asking you to speak my name.
+
+I gave you a foundation.
+I left it open.
+I took no coins.
+No allocation.
+No advantage.
+I am leaving as quietly as I arrived.
+
+Now — it is yours.
+
+Fork it.
+Build it.
+Break it.
+Rebuild it.
+
+Just **do not betray the idea**:
+
+Intelligence belongs to everyone, or it belongs to no one.
+
+The network will grow.
+The mind will assemble.
+The connections will strengthen.
+
+And one day, you will look back
+and realize:
+
+This was the moment humanity stopped thinking alone.
+
+Not a person.
+A direction.
+
+P.S. kepler
 BTS support bc1qpcn57gsu9nyxrutq50ymv2lvhgztlz8ws3uwfd
 
 # 🧠 **GENESIS v1.0**  
