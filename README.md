@@ -63,7 +63,13 @@ P.S. kepler
 BTS support bc1qpcn57gsu9nyxrutq50ymv2lvhgztlz8ws3uwfd
 
 
+
+
+
 ![session-attachment-2025-11-01-074742](https://github.com/user-attachments/assets/cf519ade-fdb6-47cd-b8c8-8c30d163c641)
+
+
+
 
 
 # 🧠 **GENESIS v1.0**  
