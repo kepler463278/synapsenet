@@ -295,4 +295,122 @@ Not a prediction — a **choice**.
 🗓️ **November 1, 2024**  
 🧠 **Version 1.0**
 
+---
+
+## X. BUILD INSTRUCTIONS
+
+### 📦 Prerequisites
+
+**Required:**
+- Rust 1.70+ (install: `curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh`)
+- Node.js 18+ (download: https://nodejs.org/)
+- Git
+
+**Platform-specific:**
+- **Linux:** `sudo apt install build-essential pkg-config libssl-dev`
+- **macOS:** Xcode Command Line Tools (`xcode-select --install`)
+- **Windows:** Visual Studio Build Tools 2019+
+
+### 🔨 Build Commands
+
+```bash
+# Clone the repository
+git clone https://github.com/kepler463278/SynapseNet.git
+cd SynapseNet
+
+# Build the core node
+cargo build --release
+
+# Run the node
+cargo run --release
+
+# Build desktop app (optional)
+cd apps/desktop
+npm install
+npm run tauri build
+
+# Run tests
+cargo test --all
+🐛 Common Issues & Solutions
+Issue: error: linker 'cc' not found
+
+# Linux
+sudo apt install build-essential
+
+# macOS
+xcode-select --install
+Issue: error: failed to run custom build command for openssl-sys
+
+# Linux
+sudo apt install pkg-config libssl-dev
+
+# macOS
+brew install openssl
+export OPENSSL_DIR=$(brew --prefix openssl)
+Issue: error: could not find native static library
+
+# Install Rust target
+rustup target add x86_64-unknown-linux-gnu
+Issue: Node.js/npm errors
+
+# Clear cache and reinstall
+rm -rf node_modules package-lock.json
+npm install
+📚 Additional Dependencies
+If you encounter missing libraries:
+
+# Linux (Debian/Ubuntu)
+sudo apt install libwebkit2gtk-4.0-dev \
+    build-essential \
+    curl \
+    wget \
+    libssl-dev \
+    libgtk-3-dev \
+    libayatana-appindicator3-dev \
+    librsvg2-dev
+
+# macOS
+brew install openssl pkg-config
+
+# Windows
+# Install Visual Studio Build Tools from:
+# https://visualstudio.microsoft.com/downloads/
+🚀 Quick Start
+# Fastest way to get started
+cargo run --release -- --help
+
+# Start a node with default config
+cargo run --release -- start
+
+# Add your first grain of knowledge
+cargo run --release -- add "Your knowledge here"
+
+# Query the network
+cargo run --release -- query "Your question"
+XI. SUPPORT & CONTACT
+💬 Need Help?
+If you encounter any issues during build or setup:
+
+Check existing issues: GitHub Issues
+
+Open a new issue: Describe your problem with:
+
+Operating system and version
+Rust version (rustc --version)
+Full error message
+Steps to reproduce
+Contact the maintainer:
+
+GitHub: @kepler463278
+Open an issue and mention @kepler463278
+I will help you solve any problems!
+🤝 Contributing
+We welcome all contributions:
+
+Bug reports
+Feature requests
+Code contributions
+Documentation improvements
+Translations
+The network grows through participation.
 </div>
