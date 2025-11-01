@@ -22,7 +22,8 @@ We are Homo Conexus.
 
 This is our moment of origin.
 
-P.S. kepler
+P.S. kepler 
+BTS support bc1qpcn57gsu9nyxrutq50ymv2lvhgztlz8ws3uwfd
 
 # 🧠 **GENESIS v1.0**  
 ### **SynapseNet: A Declaration of Cognitive Independence**
