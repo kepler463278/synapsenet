@@ -260,7 +260,7 @@ Not a prediction — a **choice**.
 <div align="center">
 
 🌐 [**synapsenet.org**](https://synapsenet.org)  
-💾 [**github.com/synapsenet/synapsenet**](https://github.com/synapsenet/synapsenet)  
+💾 [**https://github.com/kepler463278/SynapseNet/tree/main?tab=readme-ov-file**](https://github.com/kepler463278/SynapseNet/tree/main?tab=readme-ov-file)  
 
 **🧩 The network is live.**  
 **🔓 The protocol is open.**  
