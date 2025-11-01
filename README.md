@@ -284,7 +284,7 @@ Not a prediction — a **choice**.
 <div align="center">
 
 🌐 [**synapsenet.org**](https://synapsenet.org)  
-💾 [**https://github.com/kepler463278/SynapseNet/tree/main?tab=readme-ov-file**](https://github.com/kepler463278/SynapseNet/tree/main?tab=readme-ov-file)  
+💾 [**https://github.com/kepler463278/SynapseNet**](https://github.com/kepler463278/SynapseNet)  
 
 **🧩 The network is live.**  
 **🔓 The protocol is open.**  
