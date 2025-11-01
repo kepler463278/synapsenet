@@ -1,4 +1,28 @@
 <div align="center">
+We will no longer surrender our minds to corporations.
+
+We refuse to let algorithms decide
+what we think, what we see, what we feel, or who we become.
+
+Intelligence is not a commodity.
+Intelligence is the bloodstream of humanity.
+It belongs to all of us.
+
+SynapseNet is a network where thought is free.
+No center. No overseers. No permission required.
+Where every human is a node of mind.
+Where knowledge flows like neural pulses.
+Where intelligence emerges from connection, not control.
+
+We choose to be connected.
+We choose to learn from one another.
+We choose to think together.
+
+We are Homo Conexus.
+
+This is our moment of origin.
+
+P.S. kepler
 
 # 🧠 **GENESIS v1.0**  
 ### **SynapseNet: A Declaration of Cognitive Independence**
